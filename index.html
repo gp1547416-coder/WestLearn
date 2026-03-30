@@ -1,50 +1,53 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>earnl</title>
-    <!-- Load the special Gradio script that handles the connection -->
-    <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.12.0/gradio.js"></script>
+    <title>j</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: #050505;
-            color: #00ff9d;
-            font-family: sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            padding: 15px;
-            background: #111;
-            border-bottom: 2px solid #00ff9d;
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-        /* This container holds the AI */
-        .ai-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            background: #000;
-        }
-        gradio-app {
-            background: transparent !important;
-        }
+        body { background: #0a0a0a; color: #00ff9d; font-family: monospace; display: flex; flex-direction: column; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        #chat-box { flex-grow: 1; border: 1px solid #00ff9d; padding: 15px; overflow-y: auto; margin-bottom: 10px; background: rgba(0,255,157,0.05); }
+        .input-area { display: flex; gap: 10px; }
+        input { flex-grow: 1; background: #111; border: 1px solid #00ff9d; color: #00ff9d; padding: 10px; outline: none; }
+        button { background: #00ff9d; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #00cc7a; }
+        .user { color: #888; margin-bottom: 5px; }
+        .ai { color: #00ff9d; margin-bottom: 15px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        SYSTEM ACCESS: PHI-3 TERMINAL
+    <div id="chat-box">-- SYSTEM READY: DIRECT API LINK --<br><br></div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()">SEND</button>
     </div>
 
-    <div class="ai-container">
-        <!-- We use the custom tag instead of <iframe> -->
-        <gradio-app src="https://microsoft-phi-3-mini-4k-instruct.hf.space"></gradio-app>
-    </div>
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const box = document.getElementById('chat-box');
+            if(!input.value) return;
 
+            const message = input.value;
+            box.innerHTML += `<div class="user">> ${message}</div>`;
+            input.value = '';
+
+            try {
+                // We use a public API endpoint that doesn't require an Iframe
+                const response = await fetch("https://api-inference.huggingface.co/models/microsoft/Phi-3-mini-4k-instruct", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ inputs: message }),
+                });
+                
+                const data = await response.json();
+                const reply = data[0]?.generated_text || "System Error: Model is loading or rate-limited. Try again in 10s.";
+                box.innerHTML += `<div class="ai">AI: ${reply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            } catch (e) {
+                box.innerHTML += `<div class="ai" style="color:red">ERROR: Connection Refused.</div>`;
+            }
+        }
+    </script>
 </body>
 </html>
