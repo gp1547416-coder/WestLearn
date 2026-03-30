@@ -3,32 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bmw</title>
+    <title>AI Chat Portal</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; overflow: hidden; }
-        .header { height: 60px; background: #0078d4; display: flex; align-items: center; padding: 0 20px; color: white; }
-        input { padding: 8px; border-radius: 4px; border: none; width: 250px; }
-        button { padding: 8px 15px; margin-left: 10px; cursor: pointer; border: none; background: #005a9e; color: white; border-radius: 4px; }
-        iframe { width: 100%; height: calc(100% - 60px); border: none; }
+        /* Modern Dark Theme */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0f19;
+            color: white;
+            overflow: hidden;
+        }
+        .navbar {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .container {
+            height: calc(100% - 60px);
+            width: 100%;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <strong>Bing Viewer</strong>&nbsp;&nbsp;
-        <input type="text" id="query" placeholder="Search something...">
-        <button onclick="search()">Search</button>
+
+    <div class="navbar">
+        <strong>⚡ AI Companion</strong>
     </div>
 
-    <!-- We start with a search for "Vercel" to see if it loads -->
-    <iframe id="bingFrame" src="https://www.bing.com/search?q=vercel"></iframe>
+    <div class="container">
+        <!-- Using a Hugging Face Space which is Iframe-friendly -->
+        <iframe 
+            src="https://huggingface.co/chat/" 
+            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads">
+        </iframe>
+    </div>
 
-    <script>
-        function search() {
-            const q = document.getElementById('query').value;
-            if (q) {
-                document.getElementById('bingFrame').src = `https://www.bing.com/search?q=${encodeURIComponent(q)}`;
-            }
-        }
-    </script>
 </body>
 </html>
