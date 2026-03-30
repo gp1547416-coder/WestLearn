@@ -3,50 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Portal</title>
+    <title>Classlink Auto Log in</title>
     <style>
-        /* Modern Dark Theme */
+        /* Cyberpunk Theme */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body, html {
-            margin: 0;
-            padding: 0;
             height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b0f19;
-            color: white;
+            background-color: #050505;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff9d;
             overflow: hidden;
         }
-        .navbar {
-            height: 60px;
+
+        /* Top Bar */
+        .status-bar {
+            height: 40px;
+            background: #111;
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 20px;
+            border-bottom: 2px solid #00ff9d;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            justify-content: space-between;
         }
+
         .container {
-            height: calc(100% - 60px);
+            height: calc(100% - 40px);
             width: 100%;
+            position: relative;
         }
+
+        /* The AI Frame */
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            filter: contrast(1.1) brightness(0.9);
+        }
+
+        /* Decorative Scanline Effect */
+        .scanline {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            background-color: #00ff9d;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 10px #00ff9d;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <strong>⚡ AI Companion</strong>
+    <div class="status-bar">
+        <div><span class="dot"></span> SYSTEM ONLINE: PHI-3 INSTRUCT</div>
+        <div>ENCRYPTED_CONNECTION: VERCEL_HOST</div>
     </div>
 
     <div class="container">
-        <!-- Using a Hugging Face Space which is Iframe-friendly -->
+        <div class="scanline"></div>
         <iframe 
-            src="https://huggingface.co/chat/" 
-            allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-            sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads">
+            src="https://huggingface.co/embed/microsoft/Phi-3-mini-4k-instruct/+/tree/main" 
+            allow="accelerometer; gyroscope; microphone">
         </iframe>
     </div>
 
